@@ -25,7 +25,7 @@ The usage of the application is quite straightforward. You simply need to run it
 # field validations
 
 **baseurl** must be a valid url.  
-**keyword** length must be a anywhere between four (4) through thirty-two (32).  
+**keyword** length must be a anywhere between 4 through 32.  
 **id** must refer to an existent id.
 
 # endpoint list
@@ -75,7 +75,7 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "reason": "Invalid size for field `keyword`. Must be a anywhere between four (4) through thirty-two (32)."
+    "reason": "Invalid size for field `keyword`. Must be a anywhere between 4 through 32."
 }
 ```
 
