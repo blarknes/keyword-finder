@@ -75,7 +75,7 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "reason": "Invalid size for field `keyword`. Must be between 3 and 33."
+    "reason": "Invalid size for field `keyword`. Must be a anywhere between four (4) through thirty-two (32)."
 }
 ```
 
