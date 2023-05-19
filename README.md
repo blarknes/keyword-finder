@@ -4,7 +4,7 @@ This application serves the fundamental objective of meticulously identifying if
 
 # how it works
 
-By default, the application runs on port 4576, which is the port provided by Spark. However, you have the flexibility to modify this setting in the [Application.java](src\main\java\com\keywordfinder\Application.java) file.
+By default, the application runs on port 4576, which is the port provided by Spark. However, you have the flexibility to modify this setting in the [Router.java](src\main\java\com\keywordfinder\Router.java) file.
 
 The **Application** file acts as the orchestrator, invoking the **Router** to configure all possible routes within the API. Each Controller is instantiated within this file, allowing for consistent handling of **all** incoming requests through the same class instances.
 
