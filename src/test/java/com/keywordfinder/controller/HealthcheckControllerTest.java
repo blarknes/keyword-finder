@@ -38,7 +38,7 @@ public class HealthcheckControllerTest {
     }
 
     @Test
-    public void testModelObjectsPOST() throws MalformedURLException {
+    public void testEndpointReturns200WhenApplicationIsAlive() throws MalformedURLException {
         // GIVEN
         URL url = new URL("http://localhost:4567/healthcheck");
         HttpMethod method = HttpMethod.GET;
