@@ -31,15 +31,6 @@ public class HttpResponse {
     }
 
     /**
-     * Sets the HTTP response code.
-     *
-     * @param code The HTTP response code to be set.
-     */
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    /**
      * Retrieves the HTTP response body as List<String>.
      *
      * @return The HTTP response body.
@@ -55,15 +46,6 @@ public class HttpResponse {
      */
     public String getBodyAsString() {
         return this.body.stream().map(n -> String.valueOf(n)).collect(joining());
-    }
-
-    /**
-     * Sets the HTTP response body.
-     *
-     * @param body The HTTP response body to be set.
-     */
-    public void setBody(List<String> body) {
-        this.body = body;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.keywordfinder.utilities;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 import java.io.BufferedReader;
@@ -9,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.eclipse.jetty.http.HttpMethod;
+import org.eclipse.jetty.http.HttpStatus;
 
 import com.keywordfinder.model.HttpResponse;
 
@@ -25,13 +27,13 @@ public class HttpClient {
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method.asString());
-            HttpResponse response = new HttpResponse(conn.getResponseCode(),
-                    new BufferedReader(new InputStreamReader(conn.getInputStream())).lines()
-                            .collect(toUnmodifiableList()));
+            var body = new BufferedReader(new InputStreamReader(conn.getInputStream())).lines()
+                    .collect(toUnmodifiableList());
+            HttpResponse response = new HttpResponse(conn.getResponseCode(), body);
             conn.disconnect();
             return response;
         } catch (IOException e) {
-            return new HttpResponse(500, null);
+            return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR_500, emptyList());
         }
     }
 
