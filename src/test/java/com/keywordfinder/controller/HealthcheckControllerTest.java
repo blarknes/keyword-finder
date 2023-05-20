@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.jetty.http.HttpMethod;
+import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,9 @@ import com.keywordfinder.utilities.Router;
 
 public class HealthcheckControllerTest {
 
+    /**
+     * Setting up the application to test the endpoints.
+     */
     @BeforeEach
     public void setUp() throws Exception {
         Router router = new Router();
@@ -25,6 +29,9 @@ public class HealthcheckControllerTest {
         awaitInitialization();
     }
 
+    /**
+     * Shutting down application after tests have been made.
+     */
     @AfterEach
     public void tearDown() throws Exception {
         stop();
@@ -41,7 +48,7 @@ public class HealthcheckControllerTest {
         HttpResponse response = client.makeHttpRequest(url, method);
 
         // THEN
-        assertEquals(200, response.getCode());
+        assertEquals(HttpStatus.OK_200, response.getCode());
         assertEquals("OK", response.getBodyAsString());
     }
 

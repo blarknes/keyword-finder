@@ -2,10 +2,12 @@ package com.keywordfinder.utilities;
 
 import static spark.Spark.port;
 
+import com.keywordfinder.controller.CrawlController;
 import com.keywordfinder.controller.HealthcheckController;
 
 public class Router {
 
+    private final CrawlController crawlController;
     private final HealthcheckController healthcheckController;
 
     private final int PORT = 4567;
@@ -17,6 +19,7 @@ public class Router {
      * routes can be available to the user.
      */
     public Router() {
+        this.crawlController = new CrawlController();
         this.healthcheckController = new HealthcheckController();
     }
 
@@ -26,6 +29,7 @@ public class Router {
     public void establishRoutes() {
         port(PORT);
 
+        crawlController.establishRoutes();
         healthcheckController.establishRoutes();
     }
 
