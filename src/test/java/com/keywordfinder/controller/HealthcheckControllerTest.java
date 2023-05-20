@@ -9,8 +9,8 @@ import java.net.URL;
 
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.keywordfinder.model.HttpResponse;
@@ -22,7 +22,7 @@ public class HealthcheckControllerTest {
     /**
      * Setting up the application to test the endpoints.
      */
-    @BeforeEach
+    @BeforeAll
     public void setUp() throws Exception {
         Router router = new Router();
         router.establishRoutes();
@@ -32,7 +32,7 @@ public class HealthcheckControllerTest {
     /**
      * Shutting down application after tests have been made.
      */
-    @AfterEach
+    @AfterAll
     public void tearDown() throws Exception {
         stop();
     }
