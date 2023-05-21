@@ -13,12 +13,11 @@ import com.keywordfinder.utilities.HttpClient;
 public class CrawlService implements Runnable {
 
     private final ThreadService threadService;
-    private final SearchInformation information;
     private final URL currentUrl;
     private final URL baseurl;
     private final String keyword;
 
-    private final HttpClient client = new HttpClient();
+    private final HttpClient client;
 
     private final String URL_REGEX = "<a\\s+(?:[^>]*?\\s+)?href=([\"'])((?!\").*?)\\1";
     private final Pattern PATTERN = Pattern.compile(URL_REGEX, CASE_INSENSITIVE);
@@ -31,10 +30,11 @@ public class CrawlService implements Runnable {
      * @param information   The Information of the user request.
      * @param currentUrl    The current URL to be crawled.
      */
-    public CrawlService(final ThreadService threadService, final SearchInformation information, final URL currentUrl) {
+    public CrawlService(final ThreadService threadService, final SearchInformation information, final URL currentUrl,
+            final HttpClient client) {
         this.threadService = threadService;
-        this.information = information;
         this.currentUrl = currentUrl;
+        this.client = client;
         this.baseurl = information.getBaseurl();
         this.keyword = information.getKeyword();
     }
@@ -46,7 +46,7 @@ public class CrawlService implements Runnable {
      * anchor tags and the desired keyword if it wasn't already found in a previous
      * line.
      */
-    public void searchInHTML() {
+    private void searchInHTML() {
         final var lines = client.makeHttpRequest(this.currentUrl, GET).getBodyAsList();
         var found = false;
 
@@ -67,8 +67,7 @@ public class CrawlService implements Runnable {
      */
     private boolean searchKeyword(String line) {
         if (line.toLowerCase().contains(this.keyword.toLowerCase())) {
-            var urls = this.information.getUrls();
-            urls.put(this.currentUrl.toString(), true);
+            this.threadService.addURLFoundKeyword(this.currentUrl.toString());
             return true;
         }
         return false;
