@@ -24,7 +24,7 @@ public class Utilities {
      * @return Unique random Id.
      */
     public static String generateRandomSearchId() {
-        String searchId = "";
+        var searchId = "";
         for (int i = 0; i < RANDOM_ID_SIZE; i++) {
             searchId += ALPHANUMERIC.charAt((int) (Math.random() * ALPHANUMERIC.length()));
         }

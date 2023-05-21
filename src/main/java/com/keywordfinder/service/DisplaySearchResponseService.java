@@ -22,7 +22,7 @@ public class DisplaySearchResponseService {
 
     private final String PARAM_ID = ":id";
 
-    public DisplaySearchResponseService(Map<String, SearchInformation> allSearches) {
+    public DisplaySearchResponseService(final Map<String, SearchInformation> allSearches) {
         this.allSearches = allSearches;
         this.requestBodyValidationService = new RequestBodyValidationService();
     }
@@ -36,7 +36,7 @@ public class DisplaySearchResponseService {
      * @param res The Spark Response.
      * @return The display information of the desired search.
      */
-    public String displaySearchInformation(Request req, Response res) {
+    public String displaySearchInformation(final Request req, final Response res) {
         try {
             this.requestBodyValidationService.validateShowMadeSearch(req, this.allSearches);
         } catch (InvalidAttributeValueException e) {

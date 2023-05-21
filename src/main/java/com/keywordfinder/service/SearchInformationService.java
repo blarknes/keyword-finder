@@ -5,10 +5,6 @@ import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.naming.directory.InvalidAttributeValueException;
 
@@ -42,7 +38,7 @@ public class SearchInformationService {
      * @throws MalformedURLException This exception will never happen, the URL is
      *                               being validated beforehand.
      */
-    public String startNewSearch(Request req, Response res) throws MalformedURLException {
+    public String startNewSearch(final Request req, final Response res) throws MalformedURLException {
         try {
             this.requestBodyValidationService.validateNewSearchBodyRequest(req);
         } catch (InvalidAttributeValueException e) {
@@ -66,7 +62,7 @@ public class SearchInformationService {
      * @throws MalformedURLException This exception will never happen, the URL is
      *                               being validated beforehand.
      */
-    private SearchInformation instantiateSearchInformation(Request req) throws MalformedURLException {
+    private SearchInformation instantiateSearchInformation(final Request req) throws MalformedURLException {
         var body = gson.fromJson(req.body(), SearchRequestBody.class);
         var id = Utilities.generateRandomSearchId();
         var baseurl = new URL(body.getBaseurl());
@@ -74,20 +70,14 @@ public class SearchInformationService {
     }
 
     /**
-     * Runs the first thread of the crawling process based on the starting values
-     * provided on the function itself and on the values inside the
-     * SearchInformation object.
+     * Kickstarts the crawling process based on the starting values provided by the
+     * user inside the SearchInformation object.
      * 
      * @param information The SearchInformation object containing user provided
      *                    data.
      */
-    private void runFirstSearchThread(SearchInformation information) {
-        var threads = new AtomicInteger(0);
-        var urlsAccessed = new ConcurrentHashMap<String, Boolean>();
-        var executor = Executors.newFixedThreadPool(256);
-
-        var service = new ThreadService(executor, urlsAccessed, threads, information, information.getBaseurl());
-        CompletableFuture.runAsync(service, executor);
+    private void runFirstSearchThread(final SearchInformation information) {
+        new ThreadService(information).run(information.getBaseurl());
     }
 
 }

@@ -5,7 +5,7 @@ import com.keywordfinder.utilities.Router;
 public class Application {
 
     public static void main(String[] args) throws Throwable {
-        Router router = new Router();
+        final var router = new Router();
         router.establishRoutes();
     }
 
