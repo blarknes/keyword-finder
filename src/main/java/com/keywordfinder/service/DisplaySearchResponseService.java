@@ -1,10 +1,10 @@
 package com.keywordfinder.service;
 
+import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
+
 import java.util.Map;
 
 import javax.naming.directory.InvalidAttributeValueException;
-
-import org.eclipse.jetty.http.HttpStatus;
 
 import com.google.gson.Gson;
 import com.keywordfinder.model.FormattedDisplayResponse;
@@ -40,7 +40,7 @@ public class DisplaySearchResponseService {
         try {
             this.requestBodyValidationService.validateShowMadeSearch(req, this.allSearches);
         } catch (InvalidAttributeValueException e) {
-            res.status(HttpStatus.BAD_REQUEST_400);
+            res.status(BAD_REQUEST_400);
             return e.getMessage();
         }
 

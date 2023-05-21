@@ -1,17 +1,16 @@
 package com.keywordfinder.service;
 
+import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.naming.directory.InvalidAttributeValueException;
-
-import org.eclipse.jetty.http.HttpStatus;
 
 import com.google.gson.Gson;
 import com.keywordfinder.model.SearchInformation;
@@ -47,7 +46,7 @@ public class SearchInformationService {
         try {
             this.requestBodyValidationService.validateNewSearchBodyRequest(req);
         } catch (InvalidAttributeValueException e) {
-            res.status(HttpStatus.BAD_REQUEST_400);
+            res.status(BAD_REQUEST_400);
             return e.getMessage();
         }
 
@@ -83,12 +82,11 @@ public class SearchInformationService {
      *                    data.
      */
     private void runFirstSearchThread(SearchInformation information) {
-        AtomicInteger threads = new AtomicInteger(0);
-        Map<String, Boolean> urlsAccessed = new ConcurrentHashMap<>();
-        ExecutorService executor = Executors.newFixedThreadPool(256);
+        var threads = new AtomicInteger(0);
+        var urlsAccessed = new ConcurrentHashMap<String, Boolean>();
+        var executor = Executors.newFixedThreadPool(256);
 
-        ThreadService service = new ThreadService(executor, urlsAccessed, threads, information,
-                information.getBaseurl());
+        var service = new ThreadService(executor, urlsAccessed, threads, information, information.getBaseurl());
         CompletableFuture.runAsync(service, executor);
     }
 

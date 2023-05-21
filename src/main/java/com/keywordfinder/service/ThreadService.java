@@ -5,9 +5,14 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.keywordfinder.model.SearchInformation;
 
 public class ThreadService implements Runnable {
+
+    private final Logger log = LoggerFactory.getLogger(ThreadService.class);
 
     private final ExecutorService executor;
     private final Map<String, Boolean> urlsAccessed;
@@ -75,6 +80,8 @@ public class ThreadService implements Runnable {
      */
     public void shutdown() {
         if (!this.executor.isShutdown()) {
+            log.info(String.format("The search from id `%s` encountered the keyword `%s` in `%d` urls.",
+                    this.information.getId(), this.keyword, this.information.getUrls().size()));
             this.executor.shutdown();
         }
     }

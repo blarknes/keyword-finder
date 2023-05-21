@@ -1,5 +1,8 @@
 package com.keywordfinder.service;
 
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static org.eclipse.jetty.http.HttpMethod.GET;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -7,8 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
-
-import org.eclipse.jetty.http.HttpMethod;
 
 import com.keywordfinder.model.SearchInformation;
 import com.keywordfinder.utilities.HttpClient;
@@ -26,7 +27,7 @@ public class CrawlService {
     private final HttpClient client = new HttpClient();
 
     private final String URL_REGEX = "<a\\s+(?:[^>]*?\\s+)?href=([\"'])((?!\").*?)\\1";
-    private final Pattern PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
+    private final Pattern PATTERN = Pattern.compile(URL_REGEX, CASE_INSENSITIVE);
 
     public CrawlService(ExecutorService executor, Map<String, Boolean> urlsAccessed, AtomicInteger threadCounter,
             SearchInformation information, URL currentUrl, URL baseurl, String keyword) {
@@ -47,7 +48,7 @@ public class CrawlService {
      * line.
      */
     public void searchInHTML() {
-        final var lines = client.makeHttpRequest(this.currentUrl, HttpMethod.GET).getBodyAsList();
+        final var lines = client.makeHttpRequest(this.currentUrl, GET).getBodyAsList();
         var found = false;
 
         for (String line : lines) {
@@ -87,13 +88,12 @@ public class CrawlService {
         final var matcher = PATTERN.matcher(line);
 
         while (matcher.find()) {
-            final URL newUrl;
-
             /**
              * The new urls will be in the second matched group of the regex, then will have
              * everything after `#` replaced to avoid repetition created by fragment
              * identifiers.
              */
+            final URL newUrl;
             final var newUrlAsString = matcher.group(2);
 
             try {
@@ -120,8 +120,8 @@ public class CrawlService {
      * @param newUrl The new URL to be crawled.
      */
     private void startNewThread(URL newUrl) {
-        ThreadService crawlService = new ThreadService(this.executor, this.urlsAccessed, this.threadCounter,
-                this.information, newUrl);
+        var crawlService = new ThreadService(this.executor, this.urlsAccessed, this.threadCounter, this.information,
+                newUrl);
 
         CompletableFuture.runAsync(crawlService, this.executor)
                 .thenRun(() -> {
