@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.keywordfinder.model.SearchInformation;
+import com.keywordfinder.utilities.HttpClient;
 
 public class ThreadService {
 
@@ -22,6 +23,8 @@ public class ThreadService {
     private final AtomicInteger threadCounter;
     private final ExecutorService executor;
 
+    private final HttpClient client;
+
     /**
      * Constructs a ThreadService object to initialize the parameters that will move
      * along on the created threads of the CrawlService to find a desired keyword.
@@ -29,10 +32,25 @@ public class ThreadService {
      * @param information The user provided search information.
      */
     public ThreadService(final SearchInformation information) {
+        this(information, new ConcurrentHashMap<>(), new AtomicInteger(0), Executors.newFixedThreadPool(256));
+    }
+
+    /**
+     * Constructs a ThreadService object to initialize the parameters that will move
+     * along on the created threads of the CrawlService to find a desired keyword.
+     * 
+     * @param information   The user provided information.
+     * @param urlsAccessed  The Map of accessed urls.
+     * @param threadCounter The counter of threads.
+     * @param executor      The executor service that will handle the runnable.
+     */
+    public ThreadService(final SearchInformation information, final Map<String, Boolean> urlsAccessed,
+            AtomicInteger threadCounter, ExecutorService executor) {
         this.information = information;
-        this.urlsAccessed = new ConcurrentHashMap<>();
-        this.threadCounter = new AtomicInteger(0);
-        this.executor = Executors.newFixedThreadPool(256);
+        this.urlsAccessed = urlsAccessed;
+        this.threadCounter = threadCounter;
+        this.executor = executor;
+        this.client = new HttpClient();
     }
 
     /**
@@ -49,20 +67,33 @@ public class ThreadService {
     }
 
     /**
+     * Adds url to map of found URLS for the current search when the user desired
+     * keyword was found.
+     * 
+     * @param currentUrl The URL where the keyword was found.
+     */
+    public void addURLFoundKeyword(String currentUrl) {
+        this.information.getUrls().computeIfAbsent(currentUrl, key -> {
+            return true;
+        });
+    }
+
+    /**
      * Starts a new Thread or each url found inside the HTML page text.
+     * <p>
+     * This method is public for tests.
      * 
      * @param url The new URL to be crawled.
      */
     public void runNewThread(final URL url) {
-        final var runnable = new CrawlService(this, this.information, url);
+        final var runnable = new CrawlService(this, this.information, url, this.client);
 
-        System.out.println(this.threadCounter.get());
-        this.threadCounter.incrementAndGet();
+        threadCounter.incrementAndGet();
 
         CompletableFuture.runAsync(runnable, this.executor)
-                .thenAccept(empty -> {
+                .whenComplete((result, throwable) -> {
                     final var threads = threadCounter.decrementAndGet();
-                    if (threads <= 1) {
+                    if (threads <= 0) {
                         shutdown();
                     }
                 });

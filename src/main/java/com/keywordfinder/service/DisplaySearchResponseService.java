@@ -20,7 +20,7 @@ public class DisplaySearchResponseService {
 
     private final Gson gson = new Gson();
 
-    private final String PARAM_ID = ":id";
+    private final static String PARAM_ID = ":id";
 
     public DisplaySearchResponseService(final Map<String, SearchInformation> allSearches) {
         this.allSearches = allSearches;
@@ -37,14 +37,15 @@ public class DisplaySearchResponseService {
      * @return The display information of the desired search.
      */
     public String displaySearchInformation(final Request req, final Response res) {
+        var id = req.params().get(PARAM_ID);
+
         try {
-            this.requestBodyValidationService.validateShowMadeSearch(req, this.allSearches);
+            this.requestBodyValidationService.validateShowMadeSearch(req, this.allSearches, id);
         } catch (InvalidAttributeValueException e) {
             res.status(BAD_REQUEST_400);
             return e.getMessage();
         }
 
-        var id = req.params().get(PARAM_ID);
         var response = new FormattedDisplayResponse(allSearches.get(id));
 
         return gson.toJson(response);

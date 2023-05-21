@@ -20,8 +20,8 @@ public class CrawlController {
 
     private final Map<String, SearchInformation> allSearches;
 
-    private final String REQ_TYPE = "application/json";
-    private final String RES_TYPE = "application/json";
+    private final static String REQ_TYPE = "application/json";
+    private final static String RES_TYPE = "application/json";
 
     /**
      * Constructor to initialize all the const classes present in this file, so that

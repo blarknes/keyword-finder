@@ -13,7 +13,7 @@ import spark.Request;
 
 public class RequestBodyValidationService {
 
-    Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     private final static String REGEX_PATTERN_URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
@@ -21,7 +21,6 @@ public class RequestBodyValidationService {
      * Validate if the body of the new keyword search is valid or not.
      * 
      * @param req The Spark Request.
-     * @param res The Spark Response.
      * @throws InvalidAttributeValueException
      */
     public void validateNewSearchBodyRequest(final Request req) throws InvalidAttributeValueException {
@@ -52,14 +51,12 @@ public class RequestBodyValidationService {
      * id or not.
      * 
      * @param req         The Spark Request.
-     * @param res         The Spark Response.
      * @param allSearches The information of every search.
+     * @param id          The user provided id.
      * @throws InvalidAttributeValueException
      */
-    public void validateShowMadeSearch(final Request req, final Map<String, SearchInformation> allSearches)
-            throws InvalidAttributeValueException {
-        var id = req.params().get(":id");
-
+    public void validateShowMadeSearch(final Request req, final Map<String, SearchInformation> allSearches,
+            final String id) throws InvalidAttributeValueException {
         if (!allSearches.containsKey(id)) {
             throw new InvalidAttributeValueException(
                     "{ \"reason\": \"Invalid value for field `id`. This id does not exist.\" }");
