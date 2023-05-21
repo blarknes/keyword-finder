@@ -8,7 +8,6 @@ import static org.eclipse.jetty.http.HttpStatus.INTERNAL_SERVER_ERROR_500;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,7 +32,7 @@ public class HttpClient {
      * @param body   The body of the request.
      * @return
      */
-    public HttpResponse makeHttpRequest(URL url, HttpMethod method, String body) {
+    public HttpResponse makeHttpRequest(final URL url, final HttpMethod method, final String body) {
         try {
             var conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method.asString());
@@ -68,7 +67,7 @@ public class HttpClient {
      * @param method The HTTP method to be used for the request.
      * @return An instance of HttpResponse containing the response code and body.
      */
-    public HttpResponse makeHttpRequest(URL url, HttpMethod method) {
+    public HttpResponse makeHttpRequest(final URL url, final HttpMethod method) {
         return this.makeHttpRequest(url, method, null);
     }
 
@@ -79,10 +78,10 @@ public class HttpClient {
      * @param body The body of the request.
      * @throws IOException If there is a problem setting the body.
      */
-    private void setRequestBody(HttpURLConnection conn, String body) throws IOException {
+    private void setRequestBody(final HttpURLConnection conn, final String body) throws IOException {
         conn.setDoOutput(true);
-        OutputStream os = conn.getOutputStream();
-        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+        var os = conn.getOutputStream();
+        var osw = new OutputStreamWriter(os, "UTF-8");
         osw.write(body);
         osw.flush();
         osw.close();

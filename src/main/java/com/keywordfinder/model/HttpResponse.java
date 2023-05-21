@@ -16,7 +16,7 @@ public class HttpResponse {
      * @param code The HTTP response code.
      * @param body The response body.
      */
-    public HttpResponse(Integer code, List<String> body) {
+    public HttpResponse(final Integer code, final List<String> body) {
         this.code = code;
         this.body = body;
     }

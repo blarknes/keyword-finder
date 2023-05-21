@@ -2,7 +2,10 @@ package com.keywordfinder.service;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -10,66 +13,59 @@ import org.slf4j.LoggerFactory;
 
 import com.keywordfinder.model.SearchInformation;
 
-public class ThreadService implements Runnable {
+public class ThreadService {
 
     private final Logger log = LoggerFactory.getLogger(ThreadService.class);
 
-    private final ExecutorService executor;
+    private final SearchInformation information;
     private final Map<String, Boolean> urlsAccessed;
     private final AtomicInteger threadCounter;
-    private final SearchInformation information;
-    private final URL currentUrl;
-    private final URL baseurl;
-    private final String keyword;
-
-    private final CrawlService crawlService;
+    private final ExecutorService executor;
 
     /**
-     * Constructs a ThreadService object to move along the parameters initialized on
-     * the first thread created by the end user request to find a desired keyword.
+     * Constructs a ThreadService object to initialize the parameters that will move
+     * along on the created threads of the CrawlService to find a desired keyword.
      * 
-     * @param executor      The ExecutorService of each request.
-     * @param urlsAccessed  The urls accessed currently in the search.
-     * @param threadCounter The thread counter.
-     * @param information   The user provided search information.
-     * @param currentUrl    The current url to be investigated.
+     * @param information The user provided search information.
      */
-    public ThreadService(ExecutorService executor, Map<String, Boolean> urlsAccessed, AtomicInteger threadCounter,
-            SearchInformation information, URL currentUrl) {
-        this.executor = executor;
-        this.urlsAccessed = urlsAccessed;
-        this.threadCounter = threadCounter;
+    public ThreadService(final SearchInformation information) {
         this.information = information;
-        this.currentUrl = currentUrl;
-        this.baseurl = information.getBaseurl();
-        this.keyword = information.getKeyword();
-
-        this.crawlService = new CrawlService(this.executor, this.urlsAccessed, this.threadCounter, this.information,
-                this.currentUrl, this.baseurl, this.keyword);
+        this.urlsAccessed = new ConcurrentHashMap<>();
+        this.threadCounter = new AtomicInteger(0);
+        this.executor = Executors.newFixedThreadPool(256);
     }
 
     /**
-     * Adds one thread to the counter and starts the crawling service if the current
-     * url was not accessed prior to this instance.
+     * Starts the crawling service if the current url was not accessed prior to this
+     * instance.
+     * 
+     * @param url The new URL to be crawled.
      */
-    private void start() {
-        synchronized (this.threadCounter) {
-            this.threadCounter.incrementAndGet();
-        }
-
-        this.urlsAccessed.computeIfAbsent(this.currentUrl.toString(), key -> {
-            crawlService.searchInHTML();
+    public void run(final URL url) {
+        urlsAccessed.computeIfAbsent(url.toString(), key -> {
+            runNewThread(url);
             return true;
         });
     }
 
     /**
-     * On each new Thread initialization of the ThreadService class, runs start
-     * function to kickstart the crawling process accordingly.
+     * Starts a new Thread or each url found inside the HTML page text.
+     * 
+     * @param url The new URL to be crawled.
      */
-    @Override
-    public void run() {
-        start();
+    public void runNewThread(final URL url) {
+        final var runnable = new CrawlService(this, this.information, url);
+
+        System.out.println(this.threadCounter.get());
+        this.threadCounter.incrementAndGet();
+
+        CompletableFuture.runAsync(runnable, this.executor)
+                .thenAccept(empty -> {
+                    final var threads = threadCounter.decrementAndGet();
+                    if (threads <= 1) {
+                        shutdown();
+                    }
+                });
     }
 
     /**
@@ -81,7 +77,9 @@ public class ThreadService implements Runnable {
     public void shutdown() {
         if (!this.executor.isShutdown()) {
             log.info(String.format("The search from id `%s` encountered the keyword `%s` in `%d` urls.",
-                    this.information.getId(), this.keyword, this.information.getUrls().size()));
+                    this.information.getId(), this.information.getKeyword(), this.information.getUrls().size()));
+
+            this.information.updateDone();
             this.executor.shutdown();
         }
     }

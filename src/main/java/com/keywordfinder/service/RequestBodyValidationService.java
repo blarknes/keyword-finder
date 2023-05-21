@@ -24,7 +24,7 @@ public class RequestBodyValidationService {
      * @param res The Spark Response.
      * @throws InvalidAttributeValueException
      */
-    public void validateNewSearchBodyRequest(Request req) throws InvalidAttributeValueException {
+    public void validateNewSearchBodyRequest(final Request req) throws InvalidAttributeValueException {
         SearchRequestBody searchBody;
 
         try {
@@ -56,7 +56,7 @@ public class RequestBodyValidationService {
      * @param allSearches The information of every search.
      * @throws InvalidAttributeValueException
      */
-    public void validateShowMadeSearch(Request req, Map<String, SearchInformation> allSearches)
+    public void validateShowMadeSearch(final Request req, final Map<String, SearchInformation> allSearches)
             throws InvalidAttributeValueException {
         var id = req.params().get(":id");
 

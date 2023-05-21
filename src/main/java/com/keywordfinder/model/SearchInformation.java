@@ -20,7 +20,7 @@ public class SearchInformation {
      * @param baseurl The base url for the search.
      * @param keyword The keyword to be searched.
      */
-    public SearchInformation(String id, URL baseurl, String keyword) {
+    public SearchInformation(final String id, final URL baseurl, final String keyword) {
         this.id = id;
         this.baseurl = baseurl;
         this.keyword = keyword;

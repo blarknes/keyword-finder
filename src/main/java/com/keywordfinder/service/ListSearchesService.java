@@ -33,7 +33,7 @@ public class ListSearchesService {
      * @param res The Spark Response.
      * @return The formatted information of all searches.
      */
-    public String listAllSearches(Request req, Response res) {
+    public String listAllSearches(final Request req, final Response res) {
         var searchesDone = new ArrayList<String>();
         var searchesActive = new ArrayList<String>();
 
@@ -53,7 +53,7 @@ public class ListSearchesService {
      * @param searchesDone   The List of done searches.
      * @param searchesActive The List of active searches.
      */
-    private void filterSearchesIntoLists(List<String> searchesDone, List<String> searchesActive) {
+    private void filterSearchesIntoLists(final List<String> searchesDone, final List<String> searchesActive) {
         for (var key : this.allSearches.keySet()) {
             var entry = this.allSearches.get(key);
 

@@ -5,20 +5,14 @@ import static org.eclipse.jetty.http.HttpMethod.GET;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import com.keywordfinder.model.SearchInformation;
 import com.keywordfinder.utilities.HttpClient;
 
-public class CrawlService {
+public class CrawlService implements Runnable {
 
-    private final ExecutorService executor;
-    private final Map<String, Boolean> urlsAccessed;
-    private final AtomicInteger threadCounter;
+    private final ThreadService threadService;
     private final SearchInformation information;
     private final URL currentUrl;
     private final URL baseurl;
@@ -29,15 +23,20 @@ public class CrawlService {
     private final String URL_REGEX = "<a\\s+(?:[^>]*?\\s+)?href=([\"'])((?!\").*?)\\1";
     private final Pattern PATTERN = Pattern.compile(URL_REGEX, CASE_INSENSITIVE);
 
-    public CrawlService(ExecutorService executor, Map<String, Boolean> urlsAccessed, AtomicInteger threadCounter,
-            SearchInformation information, URL currentUrl, URL baseurl, String keyword) {
-        this.executor = executor;
-        this.urlsAccessed = urlsAccessed;
-        this.threadCounter = threadCounter;
+    /**
+     * Construtcts a CrawlService object to be able to search in the HTML text the
+     * desired keyword and new urls to repeat the process.
+     * 
+     * @param threadService The ThreadService of the user request.
+     * @param information   The Information of the user request.
+     * @param currentUrl    The current URL to be crawled.
+     */
+    public CrawlService(final ThreadService threadService, final SearchInformation information, final URL currentUrl) {
+        this.threadService = threadService;
         this.information = information;
         this.currentUrl = currentUrl;
-        this.baseurl = baseurl;
-        this.keyword = keyword;
+        this.baseurl = information.getBaseurl();
+        this.keyword = information.getKeyword();
     }
 
     /**
@@ -110,29 +109,17 @@ public class CrawlService {
                 continue;
             }
 
-            startNewThread(newUrl);
+            this.threadService.run(newUrl);
         }
     }
 
     /**
-     * Starts a new Thread or each url found inside the HTML page text.
-     * 
-     * @param newUrl The new URL to be crawled.
+     * Kickstarts the searching in the page when the CrawlService object is
+     * instanciated.
      */
-    private void startNewThread(URL newUrl) {
-        var crawlService = new ThreadService(this.executor, this.urlsAccessed, this.threadCounter, this.information,
-                newUrl);
-
-        CompletableFuture.runAsync(crawlService, this.executor)
-                .thenRun(() -> {
-                    synchronized (this.threadCounter) {
-                        final var threads = this.threadCounter.decrementAndGet();
-                        if (threads <= 1) {
-                            this.information.updateDone();
-                            crawlService.shutdown();
-                        }
-                    }
-                });
+    @Override
+    public void run() {
+        searchInHTML();
     }
 
 }

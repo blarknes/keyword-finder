@@ -21,7 +21,7 @@ public class FormattedDisplayResponse {
      * 
      * @param information The SearchInformation object.
      */
-    public FormattedDisplayResponse(SearchInformation information) {
+    public FormattedDisplayResponse(final SearchInformation information) {
         this.id = information.getId();
         this.status = information.isDone() ? "done" : "active";
         this.urls = information.getUrls().keySet().stream().sorted().collect(toList());
