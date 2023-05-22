@@ -2,6 +2,20 @@
 
 This application serves the fundamental objective of meticulously identifying if precise **keywords** (ignoring case sensivity) are located within a designated **website** and its associated **subdomains**. Moreover, it offers users a comprehensive array of sophisticated tools to effortlessly examine the ongoing succinct overview of all conducted searches, or alternatively, delve into an intricate analysis of the granular status pertaining to a particular search.
 
+# running in docker
+
+To run the application in Docker, you simply build the image.
+
+```sh
+docker build . -t keywordfinder
+```
+
+Then run the container in the port specified in the class Router.java on the application.
+
+```sh
+docker run -p 4567:4567 --rm keywordfinder
+```
+
 # how it works
 
 By default, the application runs on port 4576, which is the port provided by Spark. However, you have the flexibility to modify this setting in the [Router.java](src\main\java\com\keywordfinder\Router.java) file.
