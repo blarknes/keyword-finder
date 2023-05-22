@@ -26,7 +26,7 @@ At present, the application consists of two distinct Controllers: the **Healthch
 
 The primary objective of the Healthcheck Controller is to provide a status update on the Application's operational state. It achieves this by simply returning a straightforward `200 OK` response to incoming requests, confirming that the Application is running as expected.
 
-Within the **Crawl** Controller lies the heart of the application's functionality. Here, two main functionalities are implemented: listing and scheduling.
+Within the **Crawl** Controller is where the _Magic_ happens, here lies the heart of the application's functionality. Here, two main functionalities are implemented: listing and scheduling.
 
 The **Lister** takes charge of presenting the user with a comprehensive overview of all ongoing searches, providing the information in a concise and easily digestible format. Additionally, it offers the capability to retrieve detailed information on a specific search, presenting a more elaborate view of the results.
 
