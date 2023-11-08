@@ -45,7 +45,7 @@ public class SearchThread implements Runnable {
         val keyword = this.information.getKeyword().toLowerCase();
 
         if (line.toLowerCase().contains(keyword)) {
-            this.threadManager.updateUrlKeywordWasFound(this.currentUrl.toString());
+            this.threadManager.updateUrlKeywordWasFound(this.currentUrl);
             return true;
         }
 

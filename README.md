@@ -1,8 +1,8 @@
 # keyword-finder
 
-This application serves the fundamental objective of meticulously identifying if precise **keywords** (ignoring case sensivity) are located within a designated **website** and its associated **subdomains**. Moreover, it offers users a comprehensive array of sophisticated tools to effortlessly examine the ongoing succinct overview of all conducted searches, or alternatively, delve into an intricate analysis of the granular status pertaining to a particular search.
+The focus of keyword-finder is, as the name say, look for specific **keywords** on a provided **website** an its associated **subdomains**.
 
-# running in docker
+## running in docker
 
 To run the application in Docker, you simply build the image.
 
@@ -13,45 +13,38 @@ docker build . -t keywordfinder
 Then run the container in the port specified in the class Router.java on the application.
 
 ```sh
-docker run -p 4567:4567 --rm keywordfinder
+docker run -p 8080:8080 --rm keywordfinder
 ```
 
-# how it works
+## how it works
 
-By default, the application runs on port 4576, which is the port provided by Spark. However, you have the flexibility to modify this setting in the [Router.java](src\main\java\com\keywordfinder\Router.java) file.
+At present, the application consists of two distinct Controllers: **Healthcheck** and **Search**.
 
-The **Application** file acts as the orchestrator, invoking the **Router** to configure all possible routes within the API. Each Controller is instantiated within this file, allowing for consistent handling of **all** incoming requests through the same class instances.
+The sole objective of the Healthcheck Controller is to provide a status on the Application's operational state. It achieves this by simply returning a straightforward `200 OK` response to any incoming requests, confirming that the Application is running.
 
-At present, the application consists of two distinct Controllers: the **Healthcheck** and the **Crawl**.
+Within the **Search** Controller is where the _Magic_ happens. It's where the two main functionalities are implemented: schedule and display.
 
-The primary objective of the Healthcheck Controller is to provide a status update on the Application's operational state. It achieves this by simply returning a straightforward `200 OK` response to incoming requests, confirming that the Application is running as expected.
+The **schedule** assumes the responsibility of asynchronously search for the desired keyword and any new subdomains present in anchor tags found within the HTML of the provided website. For each new encountered subdomain, the process is repeated, recording every domain passed through and if the keyword was found or not.
 
-Within the **Crawl** Controller is where the _Magic_ happens, here lies the heart of the application's functionality. Here, two main functionalities are implemented: listing and scheduling.
+The **display** takes charge of presenting to the user a report of all searches made while the application was running, as well as, detailed information of any search made.
 
-The **Lister** takes charge of presenting the user with a comprehensive overview of all ongoing searches, providing the information in a concise and easily digestible format. Additionally, it offers the capability to retrieve detailed information on a specific search, presenting a more elaborate view of the results.
+## using the application
 
-The **Scheduler**, on the other hand, assumes the responsibility of executing the search function asynchronously. Its primary purpose is to search for the **desired keyword** and any **new subdomains** present in anchor tags within the HTML of the **provided website specified in the user's request**. For each new subdomain encountered, the process is repeated, diligently recording all domains that contain the desired keyword in the information result object. This enables real-time monitoring of the ongoing searches and allows users to identify the domains where the desired keyword has been found.
+The usage of the application is quite straightforward. You simply need to run it and utilize the `/search` endpoint, as demonstrated in the [endpoints](#endpoints) section.
 
-# using the application
-
-The usage of the application is quite straightforward. You simply need to run it and utilize the `/crawl` endpoint, as demonstrated in the [endpoints](#endpoints) section.
-
-# field validations
-
-**baseurl** must be a valid url.  
-**keyword** length must be a anywhere between 4 through 32.  
-**id** must refer to an existent id.
-
-# endpoint list
+## endpoint list
 
 <details>
 <summary>search keyword</summary>
 
 ### request
 
+`baseurl` must be a valid url.  
+`keyword` length must be a anywhere between 4 through 32.
+
 ```http
-POST /crawl HTTP/1.1
-Host: localhost:4567
+POST /search HTTP/1.1
+Host: localhost:8080
 Content-Type: application/json
 Body:
 {
@@ -63,7 +56,7 @@ Body:
 ### response
 
 ```http
-200 OK
+201 OK
 Content-Type: application/json
 Body:
 {
@@ -71,25 +64,21 @@ Body:
 }
 ```
 
-### response (invalid baseurl)
+### response (invalid body)
 
 ```http
 400 Bad Request
 Content-Type: application/json
 Body:
 {
-    "reason": "Invalid value for field `baseurl`. Not a valid URL."
-}
-```
-
-### response (invalid keyword)
-
-```http
-400 Bad Request
-Content-Type: application/json
-Body:
-{
-    "reason": "Invalid size for field `keyword`. Must be a anywhere between 4 through 32."
+    "timestamp": "2023-01-01T04:44:44.302067400Z",
+    "status": 400,
+    "error": "Bad Request",
+    "message": [
+        "The baseurl must be a valid url",
+        "The keyword size must be between 4 and 32"
+    ],
+    "path": "/search"
 }
 ```
 
@@ -100,9 +89,11 @@ Body:
 
 ### request
 
+`id` must refer to an existent id.
+
 ```http
-POST /crawl/{{id}} HTTP/1.1
-Host: localhost:4567
+GET /search/{{id}} HTTP/1.1
+Host: localhost:8080
 Content-Type: application/json
 ```
 
@@ -113,8 +104,12 @@ Content-Type: application/json
 Content-Type: application/json
 Body:
 {
-    "id": "OBkOrwre",
-    "status": "active",
+    "id": "UsgTfB70",
+    "keyword": "magic",
+    "baseurl": "https://magic.wizards.com/en/news,
+    "status": "running",
+    "looked": 1,
+    "found": 2,
     "urls": [
         "https://magic.wizards.com/en/news",
         "https://magic.wizards.com/en/news/archive?author=4bUf4MDTiLi6jOKxDj3KQm"
@@ -129,7 +124,11 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "reason": "Invalid value for field `id`. This id does not exist."
+    "timestamp": "2023-11-08T04:49:10.729+00:00",
+    "status": 400,
+    "error": "Bad Request",
+    "message": "The ID invalid_id does not exist",
+    "path": "/search/invalid_id"
 }
 ```
 
@@ -141,8 +140,8 @@ Body:
 ### request
 
 ```http
-POST /crawl/list HTTP/1.1
-Host: localhost:4567
+GET /search HTTP/1.1
+Host: localhost:8080
 Content-Type: application/json
 ```
 
@@ -153,11 +152,23 @@ Content-Type: application/json
 Content-Type: application/json
 Body:
 {
-    "active": [
-        "OBkOrwre: keyword found in 0 urls"
-    ],
-    "done": [
-        "f1fm4K8b: keyword found in 44 urls"
+    "searches": [
+        {
+            "id": "djoLV6av",
+            "keyword": "magic",
+            "baseurl": "https://magic.wizards.com/en/news,
+            "status": "done",
+            "looked": 1,
+            "found": 44
+        },
+        {
+            "id": "594epjVV",
+            "keyword": "magic",
+            "baseurl": "https://magic.wizards.com/en/news,
+            "status": "runnning",
+            "looked": 1,
+            "found": 4
+        }
     ]
 }
 ```
@@ -171,7 +182,7 @@ Body:
 
 ```http
 GET /healthcheck HTTP/1.1
-Host: localhost:4567
+Host: localhost:8080
 ```
 
 ### response

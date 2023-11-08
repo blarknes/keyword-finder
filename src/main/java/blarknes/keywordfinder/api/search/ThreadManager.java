@@ -20,8 +20,7 @@ public class ThreadManager {
     private final SearchInformation information;
     private final ExecutorService executor;
     private final HttpRequestSender httpRequestSender;
-
-    private final AtomicInteger runningThreadsCount = new AtomicInteger(0);
+    private final AtomicInteger runningThreadsCount;
 
     /**
      * Spawns a new thread if the url is not present on the searched ones.
