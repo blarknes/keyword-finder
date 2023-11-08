@@ -1,4 +1,4 @@
-package blarknes.keywordfinder.api.search.utilities;
+package blarknes.keywordfinder.api.search.utility;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class IdUtilities {
 
-    public static final Integer RANDOM_ID_SIZE = 8;
+    private static final Integer RANDOM_ID_SIZE = 8;
     private static final String ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     /**

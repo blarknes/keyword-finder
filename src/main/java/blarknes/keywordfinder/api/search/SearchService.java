@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import blarknes.keywordfinder.api.search.dto.SearchRequestBody;
 import blarknes.keywordfinder.api.search.dto.SingleDisplayResponse;
 import blarknes.keywordfinder.api.search.exception.UnknownIdException;
 import blarknes.keywordfinder.api.search.model.SearchInformation;
-import blarknes.keywordfinder.api.search.utilities.IdUtilities;
+import blarknes.keywordfinder.api.search.utility.IdUtilities;
 import blarknes.keywordfinder.http.HttpRequestSender;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -28,13 +29,14 @@ public class SearchService {
 
     private final ExecutorService executor;
     private final HttpRequestSender httpRequestSender;
+    private final AtomicInteger runningThreadsCount;
     private final Map<String, SearchInformation> searches = new ConcurrentHashMap<>();
 
     /**
      * Starts a new search process based on the request body.
      *
      * @param body the request body provide by the user
-     * @return A new {@link NewSearchResponse}.
+     * @return A new {@link NewSearchResponse} containing the id.
      */
     public NewSearchResponse newSearch(final SearchRequestBody body) {
         val id = IdUtilities.generateNewId(searches);
@@ -80,7 +82,7 @@ public class SearchService {
     }
 
     private void spawnFirstSearchThread(final SearchInformation information) {
-        val threadManager = new ThreadManager(information, executor, httpRequestSender);
+        val threadManager = new ThreadManager(information, executor, httpRequestSender, runningThreadsCount);
         threadManager.run(information.getBaseurl());
     }
 
