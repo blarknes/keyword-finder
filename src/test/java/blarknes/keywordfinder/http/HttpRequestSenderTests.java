@@ -23,7 +23,7 @@ public class HttpRequestSenderTests {
     private final HttpClient mockHttpClient = mock(HttpClient.class);
     private final HttpResponse mockHttpResponse = mock(HttpResponse.class);
 
-    private final HttpRequestSender httpRequestSender = new HttpRequestSender(mockHttpClient);
+    private final HttpRequestSender mockHttpRequestSender = new HttpRequestSender(mockHttpClient);
 
     private static final String URL = "https://example.com/";
 
@@ -38,7 +38,7 @@ public class HttpRequestSenderTests {
         when(this.mockHttpClient.send(any(), any())).thenReturn(this.mockHttpResponse);
 
         // when
-        val response = this.httpRequestSender.doGetRequest(URL);
+        val response = this.mockHttpRequestSender.doGetRequest(URL);
 
         // then
         assertEquals(expectedResponseBody, response);
@@ -51,7 +51,7 @@ public class HttpRequestSenderTests {
         when(this.mockHttpClient.send(any(), any())).thenReturn(this.mockHttpResponse);
 
         // when
-        val throwable = catchThrowable(() -> this.httpRequestSender.doGetRequest(URL));
+        val throwable = catchThrowable(() -> this.mockHttpRequestSender.doGetRequest(URL));
 
         // then
         assertThat(throwable).isInstanceOf(HttpErrorResponseException.class);
