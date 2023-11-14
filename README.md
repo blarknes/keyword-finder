@@ -10,7 +10,7 @@ To run the application in Docker, you simply build the image.
 docker build . -t keywordfinder
 ```
 
-Then run the container in the port specified in the class Router.java on the application.
+Then run the container in the default spring boot port.
 
 ```sh
 docker run -p 8080:8080 --rm keywordfinder
