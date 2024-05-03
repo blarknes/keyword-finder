@@ -56,7 +56,7 @@ Body:
 ### response
 
 ```http
-201 OK
+201 CREATED
 Content-Type: application/json
 Body:
 {
