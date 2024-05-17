@@ -106,7 +106,7 @@ Body:
 {
     "id": "UsgTfB70",
     "keyword": "magic",
-    "baseurl": "https://magic.wizards.com/en/news,
+    "baseurl": "https://magic.wizards.com/en/news",
     "status": "running",
     "looked": 1,
     "found": 2,
@@ -156,7 +156,7 @@ Body:
         {
             "id": "djoLV6av",
             "keyword": "magic",
-            "baseurl": "https://magic.wizards.com/en/news,
+            "baseurl": "https://magic.wizards.com/en/news",
             "status": "done",
             "looked": 1,
             "found": 44
@@ -164,7 +164,7 @@ Body:
         {
             "id": "594epjVV",
             "keyword": "magic",
-            "baseurl": "https://magic.wizards.com/en/news,
+            "baseurl": "https://magic.wizards.com/en/news",
             "status": "runnning",
             "looked": 1,
             "found": 4
