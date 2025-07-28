@@ -25,8 +25,7 @@ public class SearchThread implements Runnable {
     private final String currentUrl;
     private final HttpRequestSender httpRequestSender;
 
-    private static final Pattern URL_REGEX_PATTERN = Pattern.compile("<a\\s+(?:[^>]*?\\s+)?href=([\"'])((?!\").*?)\\1",
-            CASE_INSENSITIVE);
+    private static final Pattern URL_REGEX_PATTERN = Pattern.compile("<a\\s+(?:[^>]*?\\s+)?href=([\"'])((?!\").*?)\\1", CASE_INSENSITIVE);
 
     /**
      * The runnable method to search for the desired informations on the web page.
