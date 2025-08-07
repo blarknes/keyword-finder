@@ -22,8 +22,6 @@ public class ThreadManager {
     private final HttpRequestSender httpRequestSender;
     private final AtomicInteger runningThreadsCount;
 
-    private static final String SEARCH_FINISHED_MESSAGE_TEMPLATE = "Search %s found %s in %d url(s)";
-
     /**
      * Spawns a new thread if the url is not present on the searched ones.
      *
@@ -74,7 +72,7 @@ public class ThreadManager {
 
     private void closeSearch() {
         log.info(String.format(
-            SEARCH_FINISHED_MESSAGE_TEMPLATE,
+            "Search %s found %s in %d url(s)",
             this.information.getId(),
             this.information.getKeyword(),
             this.information.getUrlsKeywordFoundList().size()
