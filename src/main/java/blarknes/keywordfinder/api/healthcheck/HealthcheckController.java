@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * The controller that handles every health check and informative action.
+ * Routes every health check and informative action.
  */
 @Controller
 @RequestMapping("/")

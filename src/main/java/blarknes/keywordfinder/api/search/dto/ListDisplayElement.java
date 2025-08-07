@@ -3,7 +3,8 @@ package blarknes.keywordfinder.api.search.dto;
 import blarknes.keywordfinder.api.search.model.SearchInformation;
 
 /**
- * The dto used to display the information of a all searches.
+ * The information of a search request to be added to a {@code ListDisplayResponse} that
+ * is returned to the user.
  */
 public record ListDisplayElement(
     String id,

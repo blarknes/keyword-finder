@@ -11,7 +11,7 @@ import lombok.val;
 import lombok.extern.apachecommons.CommonsLog;
 
 /**
- * The manager of everything related to the search threads.
+ * Manages everything related to the search threads.
  */
 @RequiredArgsConstructor
 @CommonsLog

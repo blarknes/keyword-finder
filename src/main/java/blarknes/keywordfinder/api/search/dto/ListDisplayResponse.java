@@ -3,7 +3,7 @@ package blarknes.keywordfinder.api.search.dto;
 import java.util.List;
 
 /**
- * The response of the listing of searches request.
+ * The information of all search requests to be returned to the user.
  */
 public record ListDisplayResponse(
     List<ListDisplayElement> searches

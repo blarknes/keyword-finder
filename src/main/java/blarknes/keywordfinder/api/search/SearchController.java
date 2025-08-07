@@ -19,8 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * The controller responsible for every request related to the word search
- * related process.
+ * Routes all requests related to a word search.
  */
 @Controller
 @RequestMapping("/search")
