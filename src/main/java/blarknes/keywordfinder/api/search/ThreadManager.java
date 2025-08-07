@@ -80,7 +80,7 @@ public class ThreadManager {
             this.information.getUrlsKeywordFoundList().size()
         ));
 
-        this.information.updateDone();
+        this.information.markAsDone();
     }
 
 }

@@ -47,7 +47,7 @@ public class SearchInformation {
     /**
      * Updates the search status to done.
      */
-    public void updateDone() {
+    public void markAsDone() {
         this.done = true;
     }
 
