@@ -41,7 +41,7 @@ public class IdUtilities {
      * @return If the ID is in use or not.
      */
     public static boolean idExists(final Map<String, SearchInformation> searches, final String id) {
-        if (searches == null) {
+        if (null == searches) {
             return false;
         }
 
