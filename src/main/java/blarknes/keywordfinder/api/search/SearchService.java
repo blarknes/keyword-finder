@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * This service is responsible for managing and performing search operations.
+ * Manages and performs all search related operations.
  */
 @Service
 @RequiredArgsConstructor

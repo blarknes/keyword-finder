@@ -6,8 +6,8 @@ import java.util.List;
 import lombok.Builder;
 
 /**
- * Dto that formats the information of an exception in any request and format it
- * in a pattern that matches the one used by spring.
+ * The information related to an exception thrown inside any endpoint call too
+ * later be formatted in a pattern that matches the one used by Spring.
  */
 @Builder
 public record ErrorRequestResponse(

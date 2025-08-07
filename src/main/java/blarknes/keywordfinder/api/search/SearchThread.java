@@ -13,8 +13,7 @@ import lombok.val;
 import lombok.extern.apachecommons.CommonsLog;
 
 /**
- * The Thread that contains the search functionalities and run them
- * asynchronously for each url.
+ * Contains the search functionalities and run them asynchronously for each url.
  */
 @RequiredArgsConstructor
 @CommonsLog

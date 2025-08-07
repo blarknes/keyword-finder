@@ -21,7 +21,7 @@ public class SearchInformation {
     private Map<String, Boolean> urls;
 
     /**
-     * Builds a new SearchInformation object based on the user input.
+     * Builds a new SearchInformation object based on the user's input.
      *
      * @param id      the generated ID
      * @param keyword the word to be searched
@@ -36,7 +36,7 @@ public class SearchInformation {
     }
 
     /**
-     * Converts the search status to a more user readable string.
+     * Converts the search status to a user readable string.
      *
      * @return the search status converted to a string
      */

@@ -5,7 +5,7 @@ import java.util.List;
 import blarknes.keywordfinder.api.search.model.SearchInformation;
 
 /**
- * The dto used to display the search information of a single search.
+ * The information of a search request to be returned to the user.
  */
 public record SingleDisplayResponse(
     String id,
