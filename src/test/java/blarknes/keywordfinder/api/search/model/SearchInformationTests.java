@@ -20,7 +20,7 @@ public class SearchInformationTests {
         val searchInformation = new SearchInformation(ID, KEYWORD, BASEURL);
 
         // when
-        searchInformation.updateDone();
+        searchInformation.markAsDone();
 
         // then
         assertEquals("done", searchInformation.getDone());
@@ -43,7 +43,7 @@ public class SearchInformationTests {
         val searchInformation = new SearchInformation(ID, KEYWORD, BASEURL);
 
         // when
-        searchInformation.updateDone();
+        searchInformation.markAsDone();
 
         // then
         assertEquals("done", searchInformation.getDone());
