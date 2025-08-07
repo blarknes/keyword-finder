@@ -1,5 +1,7 @@
 package blarknes.keywordfinder.api.healthcheck;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,7 @@ public class HealthcheckController {
     @GetMapping
     @ResponseBody
     private String check() {
-        return "OK";
+        return OK.getReasonPhrase();
     }
 
 }
