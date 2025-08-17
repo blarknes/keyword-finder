@@ -39,7 +39,8 @@ The usage of the application is quite straightforward. You simply need to run it
 
 ### request
 
-`baseurl` must be a valid url.  
+`baseurl` must be a valid url.
+<br />
 `keyword` length must be a anywhere between 4 through 32.
 
 ```http
@@ -48,8 +49,8 @@ Host: localhost:8080
 Content-Type: application/json
 Body:
 {
-    "baseurl": "https://magic.wizards.com/en/news",
-    "keyword": "arena"
+  "baseurl": "https://magic.wizards.com/en/news",
+  "keyword": "arena"
 }
 ```
 
@@ -60,7 +61,7 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "id": "UsgTfB70"
+  "id": "UsgTfB70"
 }
 ```
 
@@ -71,14 +72,14 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "timestamp": "2023-01-01T04:44:44.302067400Z",
-    "status": 400,
-    "error": "Bad Request",
-    "message": [
-        "The baseurl must be a valid url",
-        "The keyword size must be between 4 and 32"
-    ],
-    "path": "/search"
+  "timestamp": "2023-01-01T04:44:44.302067400Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": [
+    "The baseurl must be a valid url",
+    "The keyword size must be between 4 and 32"
+  ],
+  "path": "/search"
 }
 ```
 
@@ -104,16 +105,16 @@ Content-Type: application/json
 Content-Type: application/json
 Body:
 {
-    "id": "UsgTfB70",
-    "keyword": "magic",
-    "baseurl": "https://magic.wizards.com/en/news",
-    "status": "running",
-    "looked": 1,
-    "found": 2,
-    "urls": [
-        "https://magic.wizards.com/en/news",
-        "https://magic.wizards.com/en/news/archive?author=4bUf4MDTiLi6jOKxDj3KQm"
-    ]
+  "id": "UsgTfB70",
+  "keyword": "magic",
+  "baseurl": "https://magic.wizards.com/en/news",
+  "status": "running",
+  "looked": 1,
+  "found": 2,
+  "urls": [
+    "https://magic.wizards.com/en/news",
+    "https://magic.wizards.com/en/news/archive?author=4bUf4MDTiLi6jOKxDj3KQm"
+  ]
 }
 ```
 
@@ -124,11 +125,11 @@ Body:
 Content-Type: application/json
 Body:
 {
-    "timestamp": "2023-11-08T04:49:10.729+00:00",
-    "status": 400,
-    "error": "Bad Request",
-    "message": "The ID invalid_id does not exist",
-    "path": "/search/invalid_id"
+  "timestamp": "2023-11-08T04:49:10.729+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "The ID invalid_id does not exist",
+  "path": "/search/invalid_id"
 }
 ```
 
@@ -152,24 +153,24 @@ Content-Type: application/json
 Content-Type: application/json
 Body:
 {
-    "searches": [
-        {
-            "id": "djoLV6av",
-            "keyword": "magic",
-            "baseurl": "https://magic.wizards.com/en/news",
-            "status": "done",
-            "looked": 1,
-            "found": 44
-        },
-        {
-            "id": "594epjVV",
-            "keyword": "magic",
-            "baseurl": "https://magic.wizards.com/en/news",
-            "status": "runnning",
-            "looked": 1,
-            "found": 4
-        }
-    ]
+  "searches": [
+    {
+      "id": "djoLV6av",
+      "keyword": "magic",
+      "baseurl": "https://magic.wizards.com/en/news",
+      "status": "done",
+      "looked": 1,
+      "found": 44
+    },
+    {
+      "id": "594epjVV",
+      "keyword": "magic",
+      "baseurl": "https://magic.wizards.com/en/news",
+      "status": "runnning",
+      "looked": 1,
+      "found": 4
+    }
+  ]
 }
 ```
 
