@@ -39,8 +39,7 @@ The usage of the application is quite straightforward. You simply need to run it
 
 ### request
 
-`baseurl` must be a valid url.
-<br />
+`baseurl` must be a valid url.<br />
 `keyword` length must be a anywhere between 4 through 32.
 
 ```http
