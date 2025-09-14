@@ -1,8 +1,8 @@
-### Generated ###
+# generated
 target/
 *.class
 
-### Maven ###
+# maven
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -12,7 +12,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn
 
-### STS ###
+# sts
 .apt_generated
 .classpath
 .factorypath
@@ -21,17 +21,17 @@ buildNumber.properties
 .springBeans
 .sts4-cache
 
-### Information ###
+# information
 HELP.md
 *.log
 
-### IntelliJ IDEA ###
+# intellij
 .idea
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# netbeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -41,5 +41,5 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# vscode
 .vscode/
