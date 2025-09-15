@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.val;
 
 /**
- * Handler for {@code MethodArgumentNotValidException} that formats the
+ * Handler for {@link MethodArgumentNotValidException} that formats the
  * information in a user readable way that matches the spring default to return
  * it to the request.
  */
