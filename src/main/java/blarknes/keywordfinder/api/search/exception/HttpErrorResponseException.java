@@ -1,8 +1,8 @@
 package blarknes.keywordfinder.api.search.exception;
 
 /**
- * {@code HttpErrorResponseException} is the exception thrown when an HTTP
- * Request returned with a code that was not 2xx.
+ * {@code HttpErrorResponseException} is thrown when an HTTP Request returned
+ * with a code that was not 2xx.
  */
 public class HttpErrorResponseException extends RuntimeException {
 
