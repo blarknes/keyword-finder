@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * {@code UnknownIdException} Is the exception thrown when the user tries to
+ * {@code UnknownIdException} is the exception thrown when the user tries to
  * retrieve information from an ID that does not exist.
  */
 @ResponseStatus(BAD_REQUEST)
